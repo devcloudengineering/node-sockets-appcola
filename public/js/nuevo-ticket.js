@@ -1,0 +1,24 @@
+// Referencias
+
+const btnCrear = document.querySelector("button");
+const lblNuevoTicket = document.querySelector("#lblNuevoTicket");
+
+const socket = io();
+
+socket.on("connect", () => {
+  btnCrear.disabled = false;
+});
+
+socket.on("disconnect", () => {
+  btnCrear.disabled = true;
+});
+
+socket.on("ultimo-ticket", (ticket) => {
+  lblNuevoTicket.innerText = "Ticket " + ticket;
+});
+
+btnCrear.addEventListener("click", () => {
+  socket.emit("siguiente-ticket", null, (ticket) => {
+    lblNuevoTicket.innerText = ticket;
+  });
+});
